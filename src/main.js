@@ -1,3 +1,5 @@
+import MyComp from './component'
+
 const innitilaState = [
     {
         name: 'div',
@@ -17,10 +19,17 @@ const innitilaState = [
             }
         ],
         events: {}
-    }
+    },
+    MyComp
 ]
 
+
+// for(let i = 0; i < 1200; i++){
+//     innitilaState.push(innitilaState[0])
+// }
+
 const fragment = document.createDocumentFragment();
+
 const createElements = (el) => {
     const node = document.createElement(el.name);
     const attrs = Object.keys(el.attrs)
@@ -39,11 +48,12 @@ const createElements = (el) => {
     }
     return node
 }
-
-let elements
+const dateStart = new Date()
 innitilaState.forEach(el => {
-    elements = createElements(el)
+    document.body.appendChild(createElements(el)) 
 });
+const dateFinish = (new Date()) - dateStart
 
-document.body.appendChild(elements)
+console.log(dateFinish)
+
 console.log(document.body)
