@@ -1,9 +1,27 @@
 export default {
-    name: 'p',
-    attrs: {
-        'class': ''
+    props: {},
+    addProps (props) {
+        console.log(this)
+        this.props = props
+        return this
     },
-    style: {},
-    content: 'Suppper Content',
-    events: {}
+    beforeMount() {
+        console.log('beforeMount')
+        
+    },
+    mounted() {
+        console.log(this.props)
+        setTimeout(() => console.log('time-out'), 2000)
+    },
+    comp() {
+        return {
+            name: 'p',
+            attrs: {
+                'class': ''
+            },
+            style: {},
+            content: this.props.text,
+            events: {}
+        }
+    }
 }

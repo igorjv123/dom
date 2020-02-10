@@ -1,5 +1,7 @@
 import MyComp from './component'
+import MountedService from './services/MountedService'
 
+const mountedService = new MountedService()
 const innitilaState = [
     {
         name: 'div',
@@ -20,39 +22,49 @@ const innitilaState = [
         ],
         events: {}
     },
-    MyComp
+    MyComp.addProps({ text: 'HELLO FROM PROPS' })
 ]
 
 
-// for(let i = 0; i < 1200; i++){
-//     innitilaState.push(innitilaState[0])
-// }
+for(let i = 0; i <10 ; i++){
+    innitilaState.push(innitilaState[0])
+}
 
 const fragment = document.createDocumentFragment();
 
 const createElements = (el) => {
-    const node = document.createElement(el.name);
-    const attrs = Object.keys(el.attrs)
+    if(el.beforeMount) {
+        el.beforeMount()
+    }
+    mountedService.add(el)
+    var comp = el
+    if(el.comp) comp = el.comp()
+    const node = document.createElement(comp.name);
+    const attrs = Object.keys(comp.attrs)
     if (attrs.length !== 0) {
         for(let attr of attrs) {
-            node.setAttribute(attr, el.attrs[attr]);
+            node.setAttribute(attr, comp.attrs[attr]);
         }
     }
-    if(typeof el.content === 'string') {
-        node.textContent  = el.content;
+    if(typeof comp.content === 'string') {
+        node.textContent  = comp.content;
     }
     else {
-        el.content.forEach(childNode => { 
+        comp.content.forEach(childNode => { 
             node.appendChild(createElements(childNode))
         })
     }
+    
     return node
 }
 const dateStart = new Date()
 innitilaState.forEach(el => {
-    document.body.appendChild(createElements(el)) 
+    fragment.appendChild(createElements(el)) 
 });
+mountedService.run()
+document.body.appendChild(fragment)
 const dateFinish = (new Date()) - dateStart
+
 
 console.log(dateFinish)
 
