@@ -1,6 +1,6 @@
 import MyComp from './component'
 import MountedService from './services/MountedService'
-
+import { renderDOM } from './renderer'
 const mountedService = new MountedService()
 const innitilaState = [
     {
@@ -26,43 +26,17 @@ const innitilaState = [
 ]
 
 
-for(let i = 0; i <10 ; i++){
+for(let i = 0; i <10000 ; i++){
     innitilaState.push(innitilaState[0])
 }
 
-const fragment = document.createDocumentFragment();
 
-const createElements = (el) => {
-    if(el.beforeMount) {
-        el.beforeMount()
-    }
-    mountedService.add(el)
-    var comp = el
-    if(el.comp) comp = el.comp()
-    const node = document.createElement(comp.name);
-    const attrs = Object.keys(comp.attrs)
-    if (attrs.length !== 0) {
-        for(let attr of attrs) {
-            node.setAttribute(attr, comp.attrs[attr]);
-        }
-    }
-    if(typeof comp.content === 'string') {
-        node.textContent  = comp.content;
-    }
-    else {
-        comp.content.forEach(childNode => { 
-            node.appendChild(createElements(childNode))
-        })
-    }
-    
-    return node
-}
+
 const dateStart = new Date()
-innitilaState.forEach(el => {
-    fragment.appendChild(createElements(el)) 
-});
+
+const dom = renderDOM(innitilaState, mountedService)
+document.body.appendChild(dom)
 mountedService.run()
-document.body.appendChild(fragment)
 const dateFinish = (new Date()) - dateStart
 
 

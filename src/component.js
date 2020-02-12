@@ -1,7 +1,7 @@
 export default {
     props: {},
     addProps (props) {
-        console.log(this)
+        console.log(this)   
         this.props = props
         return this
     },
@@ -12,6 +12,14 @@ export default {
     mounted() {
         console.log(this.props)
         setTimeout(() => console.log('time-out'), 2000)
+    },
+    events: {
+        click: {
+            handler: ()=> {
+                alert('click')
+            },
+            capture: false
+        }
     },
     comp() {
         return {
